@@ -1,3 +1,4 @@
+# Based on https://www.omniref.com/ruby/gems/puppet/3.2.0.rc2/files/lib/puppet/util/windows/root_certs.rb
 require 'ffi'
 require 'openssl'
 
