@@ -27,9 +27,7 @@ module Crypt
     ctx = nil
     store = open nil, 'ROOT'
     begin
-      until (ctx = enum store, ctx).null?
-        yield Ctx.new(ctx).crt
-      end
+      yield Ctx.new(ctx).crt until (ctx = enum store, ctx).null?
     ensure
       close store, 0
     end
