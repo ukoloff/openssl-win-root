@@ -24,12 +24,10 @@ module Crypt
   end
 
   def self.run
-    store = open(nil, 'ROOT')
     ctx = nil
+    store = open nil, 'ROOT'
     begin
-      while true
-        ctx = enum store, ctx
-        break if ctx.null?
+      until (ctx = enum store, ctx).null?
         crt = Ctx.new(ctx).crt
         puts "Subject: #{crt.subject}"
         puts "Valid:   #{crt.not_before} - #{crt.not_after}"
