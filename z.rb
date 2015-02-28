@@ -20,7 +20,6 @@ module Crypt
 
   def self.run
     store = open(nil, 'ROOT')
-    p store
     ctx = nil
     begin
       while true
@@ -28,7 +27,11 @@ module Crypt
         break if ctx.null?
         z = Ctx.new ctx
         crt = OpenSSL::X509::Certificate.new z[:pbCertEncoded].read_string z[:cbCertEncoded]
-        puts crt.subject
+        puts "Subject: #{crt.subject}"
+        puts "Not before: #{crt.not_before}"
+        puts "Not after: #{crt.not_after}"
+        puts crt.to_pem
+        puts
       end
     ensure
       close store, 0
