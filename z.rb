@@ -17,6 +17,10 @@ module Crypt
       :cbCertEncoded, :uint,
       :pCertInfo, :pointer,
       :hCertStore, :pointer
+
+    def crt
+      OpenSSL::X509::Certificate.new self[:pbCertEncoded].read_string self[:cbCertEncoded]
+    end
   end
 
   def self.run
@@ -26,8 +30,7 @@ module Crypt
       while true
         ctx = enum store, ctx
         break if ctx.null?
-        z = Ctx.new ctx
-        crt = OpenSSL::X509::Certificate.new z[:pbCertEncoded].read_string z[:cbCertEncoded]
+        crt = Ctx.new(ctx).crt
         puts "Subject: #{crt.subject}"
         puts "Valid:   #{crt.not_before} - #{crt.not_after}"
         puts crt.to_pem
