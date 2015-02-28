@@ -1,4 +1,3 @@
-# Based on https://www.omniref.com/ruby/gems/puppet/3.2.0.rc2/files/lib/puppet/util/windows/root_certs.rb
 require 'ffi'
 require 'openssl'
 
@@ -23,22 +22,28 @@ module Crypt
     end
   end
 
-  def self.run
+  # Based on Puppet::Util::Windows::RootCerts
+  def self.each
     ctx = nil
     store = open nil, 'ROOT'
     begin
       until (ctx = enum store, ctx).null?
-        crt = Ctx.new(ctx).crt
-        puts "Subject: #{crt.subject}"
-        puts "Valid:   #{crt.not_before} - #{crt.not_after}"
-        puts crt.to_pem
-        puts
+        yield Ctx.new(ctx).crt
       end
     ensure
       close store, 0
     end
   end
 
-  run
+  def self.save
+    each do |crt|
+      puts "Subject: #{crt.subject}"
+      puts "Valid:   #{crt.not_before} - #{crt.not_after}"
+      puts crt.to_pem
+      puts
+    end
+  end
+
+  save
 
 end
