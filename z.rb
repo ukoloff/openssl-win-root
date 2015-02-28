@@ -29,8 +29,7 @@ module Crypt
         z = Ctx.new ctx
         crt = OpenSSL::X509::Certificate.new z[:pbCertEncoded].read_string z[:cbCertEncoded]
         puts "Subject: #{crt.subject}"
-        puts "Not before: #{crt.not_before}"
-        puts "Not after: #{crt.not_after}"
+        puts "Valid:   #{crt.not_before} - #{crt.not_after}"
         puts crt.to_pem
         puts
       end
