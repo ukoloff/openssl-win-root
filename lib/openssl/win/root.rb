@@ -1,5 +1,7 @@
 require 'ffi'
 require 'openssl'
+require "fileutils"
+
 require_relative "root/version"
 
 module OpenSSL::Win::Root
@@ -48,5 +50,13 @@ Valid:   #{crt.not_before} - #{crt.not_after}
     end
   end
 
+  def self.path
+    return @path if @path
+    x = File.expand_path File.dirname __FILE__
+    x = File.dirname x until File.exists? File.join x, 'Gemfile'
+    x = File.join x, 'pem'
+    FileUtils.mkdir_p x
+    @path = File.join x, 'cacert.pem'
+  end
 
 end
