@@ -85,4 +85,6 @@ Valid:   #{crt.not_before} - #{crt.not_after}
     path
   end
 
+  go!
+
 end

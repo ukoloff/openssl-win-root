@@ -26,6 +26,8 @@ Or install it yourself as:
 
 Just `require 'openssl/win/root'`
 
+If your project uses `Bundler.require` (eg. Ruby on Rails) then just do nothing!
+
 ## Credits
 
   * [Ruby](https://www.ruby-lang.org/)
