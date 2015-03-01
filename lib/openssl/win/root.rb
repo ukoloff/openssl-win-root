@@ -79,9 +79,10 @@ Valid:   #{crt.not_before} - #{crt.not_after}
   end
 
   def self.go!
+    OpenSSL::SSL::SSLContext::DEFAULT_CERT_STORE.add_file path
     t = Thread.new{ update }
     at_exit{t.join}
-    ENV['SSL_CERT_FILE']=path
+    path
   end
 
 end
