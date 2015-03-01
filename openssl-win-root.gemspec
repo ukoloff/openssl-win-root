@@ -5,12 +5,12 @@ require 'openssl/win/root/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "openssl-win-root"
-  spec.version       = Openssl::Win::Root::VERSION
+  spec.version       = OpenSSL::Win::Root::VERSION
   spec.authors       = ["Stas Ukolov"]
   spec.email         = ["ukoloff@gmail.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
-  spec.homepage      = ""
+  spec.description   = 'Fetch Root CA certificates from Windows system store'
+  spec.summary       = ''
+  spec.homepage      = "https://github.com/ukoloff/openssl-win-root"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
