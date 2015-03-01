@@ -79,7 +79,7 @@ Valid:   #{crt.not_before} - #{crt.not_after}
   end
 
   def self.inject
-    OpenSSL::SSL::SSLContext::DEFAULT_CERT_STORE.add_file path
+    OpenSSL::SSL::SSLContext::DEFAULT_CERT_STORE.add_file path if File.exists? path
     path
   end
 
