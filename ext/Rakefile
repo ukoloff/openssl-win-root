@@ -1,0 +1,3 @@
+task :default do
+  open('out2', 'w').puts 'Hi!', $LOAD_PATH
+end
