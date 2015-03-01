@@ -2,6 +2,30 @@
 
 Fetch Root CA certificates from Windows system store
 
+## Installation
+
+Add this line to your application's Gemfile:
+
+```ruby
+  gem 'openssl-win-root' if Gem.win_platform?
+```
+
+And then execute:
+
+```sh
+  $ bundle
+```
+
+Or install it yourself as:
+
+```sh
+  $ gem install openssl-win-root
+```
+
+## Usage
+
+Just `require 'openssl/win/root'`
+
 ## Credits
 
   * [Ruby](https://www.ruby-lang.org/)
