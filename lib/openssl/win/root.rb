@@ -78,4 +78,10 @@ Valid:   #{crt.not_before} - #{crt.not_after}
     end
   end
 
+  def self.go!
+    t = Thread.new{ update }
+    at_exit{t.join}
+    ENV['SSL_CERT_FILE']=path
+  end
+
 end
