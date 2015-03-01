@@ -78,11 +78,15 @@ Valid:   #{crt.not_before} - #{crt.not_after}
     end
   end
 
-  def self.go!
+  def self.inject
     OpenSSL::SSL::SSLContext::DEFAULT_CERT_STORE.add_file path
+    path
+  end
+
+  def self.go!
     t = Thread.new{ update }
     at_exit{t.join}
-    path
+    inject
   end
 
   go!
