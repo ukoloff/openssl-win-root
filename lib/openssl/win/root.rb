@@ -6,6 +6,8 @@ require_relative "root/version"
 
 module OpenSSL::Win::Root
 
+  On = Gem.win_platform?
+
   module Crypt
     extend FFI::Library
     ffi_lib 'crypt32'
@@ -37,7 +39,7 @@ module OpenSSL::Win::Root
         close store, 0
       end
     end
-  end
+  end if On
 
   def self.save(f=STDOUT)
     f.puts <<-EOT
@@ -93,6 +95,6 @@ Valid:   #{crt.not_before} - #{crt.not_after}
     inject
   end
 
-  go!
+  go! if On
 
 end
