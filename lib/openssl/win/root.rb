@@ -57,7 +57,7 @@ Valid:   #{crt.not_before} - #{crt.not_after}
 
   def self.path
     return @path if @path
-    x = File.expand_path File.dirname __FILE__
+    x = File.expand_path '..', __FILE__
     x = File.dirname x until File.exists? File.join x, 'Gemfile'
     x = File.join x, 'pem'
     FileUtils.mkdir_p x
@@ -73,13 +73,17 @@ Valid:   #{crt.not_before} - #{crt.not_after}
     begin
       File.open(tmp, 'w'){|f| save f}
       FileUtils.mv tmp, path, force: true
+      inject
     ensure
       File.unlink tmp rescue nil
     end
   end
 
   def self.inject
-    OpenSSL::SSL::SSLContext::DEFAULT_CERT_STORE.add_file path if File.exists? path
+    return unless File.exists? path
+    return if @inject
+    OpenSSL::SSL::SSLContext::DEFAULT_CERT_STORE.add_file path
+    @inject = true
     path
   end
 
