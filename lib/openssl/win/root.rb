@@ -56,11 +56,11 @@ module OpenSSL::Win::Root
     Dir.glob(File.join path, '*'){|f| File.unlink f}
     hashes={}
     Crypt.each do |crt|
-      peers=hashes[hash=crt.subject.hash]||=[]
+      peers=hashes[hash=crt.subject.hash]||={}
       id=OpenSSL::Digest::SHA1.new.digest crt.to_der
-      next if peers.include? id
+      next if peers[id]
       name=File.join path, '%08x.%i' % [hash, peers.length]
-      peers << id
+      peers[id]=1
       File.open name, 'w' do |f|
         f.puts <<-EOT
 Subject: #{crt.subject}
