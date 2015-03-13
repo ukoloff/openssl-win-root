@@ -51,6 +51,7 @@ Subject: #{crt.subject}
 Valid:   #{crt.not_before} - #{crt.not_after}
 Saved:   #{self} v#{VERSION} @#{Time.now}
 #{crt.to_pem}
+#{crt.to_text}
         EOT
       end
     end
