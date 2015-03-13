@@ -8,6 +8,7 @@ module OpenSSL::Win::Root
 
   On = Gem.win_platform?
 
+  # Based on Puppet::Util::Windows::RootCerts
   module Crypt
     extend FFI::Library
     ffi_lib 'crypt32'
@@ -29,7 +30,6 @@ module OpenSSL::Win::Root
       end
     end
 
-    # Based on Puppet::Util::Windows::RootCerts
     def self.each
       store = open nil, 'ROOT'
       begin
@@ -41,13 +41,26 @@ module OpenSSL::Win::Root
     end
   end if On
 
+  # Path where certificates will be
+  def self.path
+    return @path if @path
+    x = File.expand_path '..', __FILE__
+    x = File.dirname x until File.exists? File.join x, 'Gemfile'
+    x = File.join x, 'pem'
+    FileUtils.mkdir_p x
+    @path = x
+  end
+
+  # Almost c_rehash
   def self.save(path=path)
     Dir.glob(File.join path, '*'){|f| File.unlink f}
     hashes={}
     Crypt.each do |crt|
-      hash=crt.subject.hash
-      name=File.join path, '%08x.%i' % [hash, hashes[hash]||=0]
-      hashes[hash]+=1
+      peers=hashes[hash=crt.subject.hash]||=[]
+      id=OpenSSL::Digest::SHA1.new.digest crt.to_der
+      next if peers.include? id
+      name=File.join path, '%08x.%i' % [hash, peers.length]
+      peers << id
       File.open name, 'w' do |f|
         f.puts <<-EOT
 Subject: #{crt.subject}
@@ -59,15 +72,7 @@ Saved:   #{self} v#{VERSION} @#{Time.now}
     end
   end
 
-  def self.path
-    return @path if @path
-    x = File.expand_path '..', __FILE__
-    x = File.dirname x until File.exists? File.join x, 'Gemfile'
-    x = File.join x, 'pem'
-    FileUtils.mkdir_p x
-    @path = x
-  end
-
+  # Instruct OpenSSL to use fetched certificates
   def self.inject
     OpenSSL::SSL::SSLContext::DEFAULT_CERT_STORE.add_path path
     path
