@@ -42,21 +42,23 @@ module OpenSSL::Win::Root
   end if On
 
   def self.save(path=path)
-    my={}
+    names={}
+    hashes={}
     Crypt.each do |crt|
-      File.open File.join(path, name='%08x.0'%crt.subject.hash), 'w' do |f|
-        my[name]=1
+      hash=crt.subject.hash
+      names[name='%08x.%i' % [hash, hashes[hash]||=0]]=1
+      hashes[hash]+=1
+      File.open File.join(path, name), 'w' do |f|
         f.puts <<-EOT
 Subject: #{crt.subject}
 Valid:   #{crt.not_before} - #{crt.not_after}
 Saved:   #{self} v#{VERSION} @#{Time.now}
 #{crt.to_pem}
-#{crt.to_text}
         EOT
       end
     end
     Dir.glob File.join path, '*' do |f|
-      File.unlink f unless my[File.basename f]
+      File.unlink f unless names[File.basename f]
     end
   end
 
