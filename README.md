@@ -52,6 +52,14 @@ require 'net/http'
 Net::HTTP.get(URI 'https://ya.ru').length
 ```
 
+You can use fetched certificates in non-Ruby projects by setting
+environment variable `SSL_CERT_FILE` to result of `OpenSSL::Win::Root.path`
+or via `-CApath` argument of `openssl` command.
+
+## See also
+
+  * [Rufus::Lua::Win](https://github.com/ukoloff/rufus-lua-win)
+
 ## Credits
 
   * [Ruby](https://www.ruby-lang.org/)
