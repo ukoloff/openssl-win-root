@@ -53,7 +53,7 @@ Net::HTTP.get(URI 'https://ya.ru').length
 ```
 
 You can use fetched certificates in non-Ruby projects by setting
-environment variable `SSL_CERT_FILE` to result of `OpenSSL::Win::Root.path`
+environment variable `SSL_CERT_DIR` to result of `OpenSSL::Win::Root.path`
 or via `-CApath` argument of `openssl` command.
 
 ## See also
