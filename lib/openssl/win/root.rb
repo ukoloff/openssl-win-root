@@ -65,7 +65,7 @@ module OpenSSL::Win::Root
         f.puts <<-EOT
 Subject: #{crt.subject}
 Valid:   #{crt.not_before} - #{crt.not_after}
-Saved:   #{self} v#{VERSION} @#{Time.now}
+Saved:   #{Time.now} by #{self} v#{VERSION}
 #{crt.to_pem}
         EOT
       end
