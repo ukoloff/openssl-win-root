@@ -53,15 +53,15 @@ module OpenSSL::Win::Root
 
   # Almost c_rehash
   def self.save(path=path)
-    Dir.glob(File.join path, '*'){|f| File.unlink f}
+    names={}
     hashes={}
     Crypt.each do |crt|
       peers=hashes[hash=crt.subject.hash]||={}
       id=OpenSSL::Digest::SHA1.new.digest crt.to_der
       next if peers[id]
-      name=File.join path, '%08x.%i' % [hash, peers.length]
+      names[name='%08x.%i' % [hash, peers.length]]=1
       peers[id]=1
-      File.open name, 'w' do |f|
+      File.open File.join(path, name), 'w' do |f|
         f.puts <<-EOT
 Subject: #{crt.subject}
 Valid:   #{crt.not_before} - #{crt.not_after}
@@ -69,6 +69,9 @@ Saved:   #{self} v#{VERSION} @#{Time.now}
 #{crt.to_pem}
         EOT
       end
+    end
+    Dir.glob File.join path, '*' do |f|
+      File.unlink f rescue nil unless names[File.basename f]
     end
   end
 
