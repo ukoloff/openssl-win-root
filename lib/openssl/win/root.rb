@@ -83,6 +83,7 @@ Saved:   #{Time.now} by #{self} v#{VERSION}
 
   def self.go!
     t = Thread.new{ save }
+    t.abort_on_exception=true
     at_exit{t.join}
     inject
   end
