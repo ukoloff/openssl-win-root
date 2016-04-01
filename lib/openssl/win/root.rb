@@ -52,7 +52,7 @@ module OpenSSL::Win::Root
   end
 
   # Almost c_rehash
-  def self.save(path=path)
+  def self.save(path=self.path)
     names={}
     hashes={}
     Crypt.each do |crt|
