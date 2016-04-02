@@ -25,3 +25,9 @@ before_test:
 test_script:
   - bundle exec ruby -e "require 'openssl/win/root'"
   - bundle exec rake
+
+after_success:
+  - 7z a root.zip pem\*
+
+artifacts:
+  - path: root.zip
