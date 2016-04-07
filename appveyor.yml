@@ -26,7 +26,7 @@ test_script:
   - bundle exec rake
 
 after_test:
-  - 7z a root.zip pem\*
+  - 7z a root.zip .\pem\*
 
 artifacts:
   - path: root.zip
