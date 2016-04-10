@@ -1,7 +1,7 @@
 require "bundler/gem_tasks"
 
 desc 'Run tests'
-task :test=>:preload do
+task :test do
   require "minitest/autorun"
 
   Dir.glob('./test/*.rb'){|f| require f}
