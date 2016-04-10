@@ -1,5 +1,6 @@
 # OpenSSL::Win::Root
 
+[![Build status](https://ci.appveyor.com/api/projects/status/skiasd9u6i4udyhw?svg=true)](https://ci.appveyor.com/project/ukoloff/openssl-win-root)
 [![Gem Version](https://badge.fury.io/rb/openssl-win-root.svg)](http://badge.fury.io/rb/openssl-win-root)
 
 Fetch Root CA certificates from Windows system store.
