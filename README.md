@@ -65,3 +65,4 @@ or via `-CApath` argument of `openssl` command.
   * [Ruby](https://www.ruby-lang.org/)
   * [OpenSSL](https://www.openssl.org/)
   * [FFI](https://github.com/ffi/ffi)
+  * [AppVeyor](http://www.appveyor.com/)
