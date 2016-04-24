@@ -27,7 +27,12 @@ test_script:
   - bundle exec rake
 
 after_test:
+  - bundle exec rake build
   - 7z a root.zip .\pem\*
 
 artifacts:
   - path: root.zip
+    name: Root certificates
+    type: zip
+  - path: pkg/*.gem
+    name: Gem
