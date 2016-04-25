@@ -5,7 +5,8 @@ class TestEngine < Minitest::Test
   WWW='https://github.com/'
 
   def test_http
-    puts "Accessing <#{WWW}>..."
+    puts msg = "Accessing <#{WWW}>..."
+    AppVeyor::Worker.message msg
     assert_raises(OpenSSL::SSL::SSLError) do
       Net::HTTP.get URI WWW
     end
