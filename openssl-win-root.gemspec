@@ -13,7 +13,6 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/ukoloff/openssl-win-root"
   spec.license       = "MIT"
 
-  spec.files         = `git ls-files`.split($/)
   spec.files         = Dir[*%w(lib ext).map{|s| "#{s}/**/*"}] << 'Gemfile'
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
