@@ -2,7 +2,7 @@ require 'net/http'
 
 class TestEngine < Minitest::Test
 
-  WWW='https://www.appveyor.com/'
+  WWW='https://github.com/'
 
   def test_http
     puts "Accessing <#{WWW}>..."
