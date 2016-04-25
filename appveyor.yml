@@ -23,7 +23,7 @@ before_test:
   - bundle -v
 
 test_script:
-  - bundle exec ruby -e "require 'openssl/win/root'"
+  - bundle exec rake preload
   - bundle exec rake
 
 after_test:
