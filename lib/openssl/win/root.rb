@@ -78,7 +78,7 @@ Saved:   #{Time.now} by #{self} v#{VERSION}
   # Instruct OpenSSL to use fetched certificates
   def self.inject
     OpenSSL::SSL::SSLContext::DEFAULT_CERT_STORE.add_path path
-    path
+    ENV["SSL_CERT_DIR"] = path
   end
 
   def self.go!
