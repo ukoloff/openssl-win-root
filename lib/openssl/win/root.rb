@@ -1,6 +1,6 @@
-require 'ffi'
 require 'openssl'
 require 'fileutils'
+require 'fiddle/import'
 
 require_relative "root/version"
 
@@ -10,34 +10,33 @@ module OpenSSL::Win::Root
 
   # Based on Puppet::Util::Windows::RootCerts
   module Crypt
-    extend FFI::Library
-    ffi_lib 'crypt32'
-    ffi_convention :stdcall
+    extend Fiddle::Importer
+    dlload 'crypt32'
 
-    attach_function :open, :CertOpenSystemStoreA, [:pointer, :string], :pointer
-    attach_function :close, :CertCloseStore, [:pointer, :uint], :int
-    attach_function :enum, :CertEnumCertificatesInStore, [:pointer, :pointer], :pointer
+    extern 'uintptr_t CertOpenSystemStoreA(uintptr_t, char*)', :stdcall
+    extern 'int CertCloseStore(uintptr_t, unsigned long)', :stdcall
+    extern 'void* CertEnumCertificatesInStore(uintptr_t, void*)', :stdcall
 
-    class Ctx < FFI::Struct
-      layout :dwCertEncodingType, :uint,
-        :pbCertEncoded, :pointer,
-        :cbCertEncoded, :uint,
-        :pCertInfo, :pointer,
-        :hCertStore, :pointer
+    Ctx = struct [
+      'unsigned long dwCertEncodingType',
+      'unsigned char* pbCertEncoded',
+      'unsigned long cbCertEncoded',
+      'void* pCertInfo',
+      'uintptr_t hCertStore',
+    ]
 
+    class Ctx
       def crt
-        OpenSSL::X509::Certificate.new self[:pbCertEncoded].read_string self[:cbCertEncoded]
+        OpenSSL::X509::Certificate.new pbCertEncoded[0, cbCertEncoded]
       end
     end
 
     def self.each
-      store = open nil, 'ROOT'
-      begin
-        ctx = nil
-        yield Ctx.new(ctx).crt until (ctx = enum store, ctx).null?
-      ensure
-        close store, 0
-      end
+      store = CertOpenSystemStoreA 0, 'ROOT'
+      ctx = nil
+      yield Ctx.new(ctx).crt until (ctx = CertEnumCertificatesInStore store, ctx).null?
+    ensure
+      CertCloseStore store, 0
     end
   end if On
 
