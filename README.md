@@ -60,10 +60,10 @@ or via `-CApath` argument of `openssl` command.
 ## See also
 
   * [Rufus::Lua::Win](https://github.com/ukoloff/rufus-lua-win)
+  * [Ruby on Windows](http://rubyonwindowsguides.github.io/) Book
 
 ## Credits
 
   * [Ruby](https://www.ruby-lang.org/)
   * [OpenSSL](https://www.openssl.org/)
-  * [FFI](https://github.com/ffi/ffi)
   * [AppVeyor](http://www.appveyor.com/)
