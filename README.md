@@ -10,13 +10,18 @@ Fetch Root CA certificates from Windows system store.
 Default installation of Ruby on Microsoft Windows provides no root certificates at all.
 Secure connections are simply impossible.
 
-Recommended fix is to load http://curl.haxx.se/ca/cacert.pem and set SSL_CERT_FILE environment variable.
+Recommended fix is to load http://curl.haxx.se/ca/cacert.pem
+and set SSL_CERT_FILE environment variable.
 
-But Windows has its own certificate store. This gem just access it, fetch trusted root certificates
+But Windows has its own certificate store.
+This gem just access it,
+fetch trusted root certificates
 and feed them to Ruby's OpenSSL.
 
-So, if you installed some certificates or your company certificate is installed by Group Policy,
-these certificates will be available to your Ruby program. In addition, no network access is required.
+So, if you installed some certificates
+or your company certificate is installed by Group Policy,
+these certificates will be available to your Ruby program.
+In addition, no network access is required.
 
 Under other OSes this gem does nothing.
 
@@ -44,7 +49,8 @@ Or install it yourself as:
 
 Just `require 'openssl/win/root'`
 
-If your project uses `Bundler.require` (eg. Ruby on Rails) then just do nothing!
+If your project uses `Bundler.require`
+(eg. Ruby on Rails) then just do nothing!
 
 To test whether SSL works (or not):
 
@@ -53,17 +59,27 @@ require 'net/http'
 Net::HTTP.get(URI 'https://ya.ru').length
 ```
 
-You can use fetched certificates in non-Ruby projects by setting
-environment variable `SSL_CERT_DIR` to result of `OpenSSL::Win::Root.path`
+You can use fetched certificates in non-Ruby projects
+by setting environment variable
+`SSL_CERT_DIR` to result of `OpenSSL::Win::Root.path`
 or via `-CApath` argument of `openssl` command.
 
 ## See also
 
-  * [Rufus::Lua::Win](https://github.com/ukoloff/rufus-lua-win)
-  * [Ruby on Windows](http://rubyonwindowsguides.github.io/) Book
+  * [Win-Ca][] for [Node.js][]
+  * [Rufus::Lua::Win][]
+  * [Ruby on Windows][] Book
 
 ## Credits
 
-  * [Ruby](https://www.ruby-lang.org/)
-  * [OpenSSL](https://www.openssl.org/)
-  * [AppVeyor](http://www.appveyor.com/)
+  * [Ruby][]
+  * [OpenSSL][]
+  * [AppVeyor][]
+
+[Rufus::Lua::Win]: https://github.com/ukoloff/rufus-lua-win
+[Ruby on Windows]: http://rubyonwindowsguides.github.io/
+[Ruby]: https://www.ruby-lang.org/
+[OpenSSL]: https://www.openssl.org/
+[AppVeyor]: http://www.appveyor.com/
+[Win-CA]: https://github.com/ukoloff/win-ca
+[Node.js]: https://nodejs.org/
