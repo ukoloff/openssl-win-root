@@ -52,14 +52,18 @@ module OpenSSL::Win::Root
 
   # Almost c_rehash
   def self.save(path=self.path)
-    names={}
-    hashes={}
+    names = {}
+    hashes = {}
+    seen = {}
     Crypt.each do |crt|
-      peers=hashes[hash=crt.subject.hash]||={}
-      id=OpenSSL::Digest::SHA1.new.digest crt.to_der
-      next if peers[id]
-      names[name='%08x.%i' % [hash, peers.length]]=1
-      peers[id]=1
+      id = OpenSSL::Digest::SHA1.new.digest crt.to_der
+      next if seen[id]
+      seen[id] = 1
+
+      hash = "%08x" % crt.subject.hash
+      names[name = "#{hash}.#{hashes[hash] ||= 0}"] = 1
+      hashes[hash] += 1
+
       File.open File.join(path, name), 'w' do |f|
         f.puts <<-EOT
 Subject: #{crt.subject}
