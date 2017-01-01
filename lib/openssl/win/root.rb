@@ -77,7 +77,8 @@ module OpenSSL::Win::Root
     Crypt.each do |crt|
       next unless cr.unique OpenSSL::Digest::SHA1.new.digest crt.to_der
 
-      File.open File.join(path, cr.name(crt.subject.hash)), 'w' do |f|
+      name = File.join path, cr.name(crt.subject.hash)
+      File.open name, 'w' do |f|
         f.puts <<-EOT
 Subject: #{crt.subject}
 Valid:   #{crt.not_before} - #{crt.not_after}
@@ -85,6 +86,8 @@ Saved:   #{Time.now} by #{self} v#{VERSION}
 #{crt.to_pem}
         EOT
       end
+      link = File.join path, cr.name(crt.subject.hash_old)
+      FileUtils.ln name, link, force: true
     end
     Dir.glob File.join path, '*' do |f|
       File.unlink f rescue nil unless cr.names[File.basename f]
