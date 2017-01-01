@@ -50,21 +50,34 @@ module OpenSSL::Win::Root
     @path = x
   end
 
+  # Implement c_rehash naming
+  class CRehash
+    def unique id
+      @seen ||= {}
+      return if @seen[id]
+      @seen[id] = true
+    end
+
+    def name hash
+      hash = "%08x" % hash
+      @hashes ||= {}
+      names[name = "#{hash}.#{@hashes[hash] ||= 0}"] = 1
+      @hashes[hash] += 1
+      name
+    end
+
+    def names
+      @names ||= {}
+    end
+  end
+
   # Almost c_rehash
   def self.save(path=self.path)
-    names = {}
-    hashes = {}
-    seen = {}
+    cr = CRehash.new
     Crypt.each do |crt|
-      id = OpenSSL::Digest::SHA1.new.digest crt.to_der
-      next if seen[id]
-      seen[id] = 1
+      next unless cr.unique OpenSSL::Digest::SHA1.new.digest crt.to_der
 
-      hash = "%08x" % crt.subject.hash
-      names[name = "#{hash}.#{hashes[hash] ||= 0}"] = 1
-      hashes[hash] += 1
-
-      File.open File.join(path, name), 'w' do |f|
+      File.open File.join(path, cr.name(crt.subject.hash)), 'w' do |f|
         f.puts <<-EOT
 Subject: #{crt.subject}
 Valid:   #{crt.not_before} - #{crt.not_after}
@@ -74,7 +87,7 @@ Saved:   #{Time.now} by #{self} v#{VERSION}
       end
     end
     Dir.glob File.join path, '*' do |f|
-      File.unlink f rescue nil unless names[File.basename f]
+      File.unlink f rescue nil unless cr.names[File.basename f]
     end
   end
 
