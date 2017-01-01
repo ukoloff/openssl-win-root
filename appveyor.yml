@@ -10,8 +10,13 @@ environment:
     - RUBY_VERSION: 21
     - RUBY_VERSION: 200
 
+platform:
+  - x64
+  - x86
+
 install:
-  - set PATH=C:\Ruby%RUBY_VERSION%\bin;%PATH%
+  - set _platform=-%Platform%
+  - set PATH=C:\Ruby%RUBY_VERSION%%_platform:-x86=%\bin;%PATH%
   - bundle config --local path vendor/bundle
   - bundle install
 
