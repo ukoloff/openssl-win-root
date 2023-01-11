@@ -44,7 +44,7 @@ module OpenSSL::Win::Root
   def self.path
     return @path if @path
     x = File.expand_path '..', __FILE__
-    x = File.dirname x until File.exists? File.join x, 'Gemfile'
+    x = File.dirname x until File.exist? File.join x, 'Gemfile'
     x = File.join x, 'pem'
     FileUtils.mkdir_p x
     @path = x
