@@ -87,8 +87,7 @@ Saved:   #{Time.now} by #{self} v#{VERSION}
         EOT
       end
       link = File.join path, cr.name(crt.subject.hash_old)
-      File.unlink link rescue nil
-      File.link name, link
+      FileUtils.ln name, link, force: true
     end
     Dir.glob File.join path, '*' do |f|
       File.unlink f rescue nil unless cr.names[File.basename f]
