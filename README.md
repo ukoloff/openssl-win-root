@@ -7,11 +7,16 @@ Fetch Root CA certificates from Windows system store.
 
 ## Abstract
 
-Default installation of Ruby on Microsoft Windows provides no root certificates at all.
-Secure connections are simply impossible.
+Default installation of Ruby on Microsoft Windows used to provide no root certificates at all.
+Secure connections were simply impossible. 
 
 Recommended fix is to load http://curl.haxx.se/ca/cacert.pem
 and set SSL_CERT_FILE environment variable.
+
+[Ruby Installer provides cacert.pem since Version 2.4.](https://github.com/oneclick/rubyinstaller2/issues/8)
+[However that certificate file is not automatically updated.](https://github.com/oneclick/rubyinstaller2/blob/9017818c301aa92041a647e16421c3a9d62fe1bc/resources/ssl/README-SSL.md)
+Since the cacert.pem was downloaded when the ruby installer version was published, new root certificates could be missing.
+
 
 But Windows has its own certificate store.
 This gem just access it,
@@ -69,6 +74,12 @@ or via `-CApath` argument of `openssl` command.
   * [Win-Ca][] for [Node.js][]
   * [Rufus::Lua::Win][]
   * [Ruby on Windows][] Book
+
+
+## Caution
+
+On Windows Server, there are cases were the Windows Certificate Store has not activated a certificate. 
+The workaround is to first load the site with a (microsoft) browser or make a WinHttpRequest with win32ole. This somehow forces the certificate store to activate the parent root certificate.
 
 ## Credits
 
